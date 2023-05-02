@@ -16,7 +16,7 @@ public class CartItemRepository : ICartItemRepository
 
 	public CartItem[] GetCartItems(int cartId) => cartItems.Find(i => i.CartId == cartId).ToArray();
 
-	public bool AddCartItem(CartItem cartItem)
+	public void AddCartItem(CartItem cartItem)
 	{
 		var id = new BsonValue((cartItem.CartId, cartItem.Id));
 
