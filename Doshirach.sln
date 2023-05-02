@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Carting", "Doshir
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doshirach.Catalog.Core", "Doshirach.Catalog.Core\Doshirach.Catalog.Core.csproj", "{1E574A4D-D87C-4062-9121-FF237354C006}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doshirach.Catalog.Persistence", "Doshirach.Catalog.Persistence\Doshirach.Catalog.Persistence.csproj", "{69E016C1-2133-4485-B508-8030F3763A2A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1E574A4D-D87C-4062-9121-FF237354C006}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E574A4D-D87C-4062-9121-FF237354C006}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E574A4D-D87C-4062-9121-FF237354C006}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69E016C1-2133-4485-B508-8030F3763A2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69E016C1-2133-4485-B508-8030F3763A2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69E016C1-2133-4485-B508-8030F3763A2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69E016C1-2133-4485-B508-8030F3763A2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
