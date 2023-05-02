@@ -33,7 +33,7 @@ public class CartService
 		return cartItemRepository.GetCartItems(cartId);
 	}
 
-	public void AddCartItem(int cartId, CartItem cartItem)
+	public void AddCartItem(CartItem cartItem)
 	{
 		if (cartItem.Id <= 0)
 			throw new InvalidOperationException("Invalid item id");
@@ -47,19 +47,16 @@ public class CartService
 		if (cartItem.Quantity <= 0)
 			throw new InvalidOperationException("Item quantity must be positive");
 
-		CheckCart(cartId);
+		CheckCart(cartItem.CartId);
 
-		cartItemRepository.AddCartItem(cartId, cartItem);
+		cartItemRepository.AddCartItem(cartItem);
 	}
 
-	public void RemoveCartItem(int cartId, int cartItemId)
+	public void RemoveCartItem(int cartItemId)
 	{
-		if (cartId <= 0)
-			throw new InvalidOperationException("Invalid cart id");
-
 		if (cartItemId <= 0)
 			throw new InvalidOperationException("Invalid item id");
 
-		cartItemRepository.RemoveCartItem(cartId, cartItemId);
+		cartItemRepository.RemoveCartItem(cartItemId);
 	}
 }

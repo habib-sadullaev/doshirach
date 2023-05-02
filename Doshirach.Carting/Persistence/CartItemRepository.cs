@@ -16,18 +16,20 @@ public class CartItemRepository : ICartItemRepository
 
 	public CartItem[] GetCartItems(int cartId) => cartItems.Find(i => i.CartId == cartId).ToArray();
 
-	public void AddCartItem(int cartId, CartItem cartItem)
+	public void AddCartItem(CartItem cartItem)
 	{
-		if (cartItems.FindById(cartItem.Id) is not { } existingCartItem)
+		BsonValue id(int cartId, int cartItemId) => new BsonValue((cartId, cartItemId));
+
+		if (cartItems.FindById(id(cartItem.CartId, cartItem.Id)) is { } existingCartItem)
 		{
-			cartItems.Insert(cartItem.Id, cartItem);
+			existingCartItem.Quantity += cartItem.Quantity;
+			existingCartItem.Price = cartItem.Price;
+			cartItems.Update(id(cartItem.CartId, cartItem.Id), existingCartItem);
 			return;
 		}
 
-		existingCartItem.Quantity += cartItem.Quantity;
-		existingCartItem.Price = cartItem.Price;
-		cartItems.Update(cartItem.Id, existingCartItem);
+		cartItems.Insert(id(cartItem.CartId, cartItem.Id), cartItem);
 	}
 
-	public void RemoveCartItem(int cartId, int cartItemId) => cartItems.Delete(cartItemId);
+	public void RemoveCartItem(int cartItemId) => cartItems.Delete(cartItemId);
 }

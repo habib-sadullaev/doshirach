@@ -5,6 +5,6 @@ namespace Doshirach.Carting.Common.Interfaces;
 public interface ICartItemRepository
 {
 	public CartItem[] GetCartItems(int cartId);
-	public void AddCartItem(int cartId, CartItem cartItem);
-	public void RemoveCartItem(int cartId, int cartItemId);
+	public void AddCartItem(CartItem cartItem);
+	public void RemoveCartItem(int cartItemId);
 }
