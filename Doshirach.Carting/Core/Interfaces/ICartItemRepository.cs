@@ -1,6 +1,6 @@
-﻿using Doshirach.Carting.Common.Models;
+﻿using Doshirach.Carting.Core.Models;
 
-namespace Doshirach.Carting.Common.Interfaces;
+namespace Doshirach.Carting.Core.Interfaces;
 
 public interface ICartItemRepository
 {

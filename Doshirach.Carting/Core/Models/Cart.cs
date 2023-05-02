@@ -1,4 +1,4 @@
-﻿namespace Doshirach.Carting.Common.Models;
+﻿namespace Doshirach.Carting.Core.Models;
 
 public class Cart
 {

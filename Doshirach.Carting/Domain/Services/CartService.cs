@@ -1,5 +1,5 @@
-﻿using Doshirach.Carting.Common.Interfaces;
-using Doshirach.Carting.Common.Models;
+﻿using Doshirach.Carting.Core.Interfaces;
+using Doshirach.Carting.Core.Models;
 
 namespace Doshirach.Carting.Domain.Services;
 
