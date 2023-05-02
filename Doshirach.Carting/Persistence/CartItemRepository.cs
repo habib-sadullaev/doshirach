@@ -27,6 +27,7 @@ public class CartItemRepository : ICartItemRepository
 				existingCartItem.Price = cartItem.Price;
 				cartItems.Update(id, existingCartItem);
 				break;
+
 			case null:
 				cartItems.Insert(id, cartItem);
 				break;
