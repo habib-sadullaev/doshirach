@@ -14,43 +14,85 @@ public class CatalogService
 		this.itemRepository = itemRepository;
 	}
 
-	public Category GetCategory(int id)
+	public Category GetCategory(int categoryId)
 	{
-		return categoryRepository.Get(id);
+		if (categoryId <= 0)
+			throw new InvalidOperationException("Invalid category id");
+
+		return categoryRepository.Get(categoryId) ?? throw new InvalidOperationException("Invalid category id");
 	}
 
-	public List<Category> ListCategories()
+	public IReadOnlyCollection<Category> ListCategories()
 	{
 		return categoryRepository.List();
 	}
 
 	public void AddCategory(Category category)
 	{
+		if (category.Id <= 0)
+			throw new InvalidOperationException("Invalid category id");
+
+		if (string.IsNullOrWhiteSpace(category.Name))
+			throw new InvalidOperationException("Category name cannot be empty");
+
+		if (category.ParentCategoryId <= 0)
+			throw new InvalidOperationException("Invalid category id");
+
 		categoryRepository.Add(category);
 	}
 
 	public void UpdateCategory(Category category)
 	{
+		if (category.Id <= 0)
+			throw new InvalidOperationException("Invalid category id");
+
+		if (string.IsNullOrWhiteSpace(category.Name))
+			throw new InvalidOperationException("Category name cannot be empty");
+
+		if (category.ParentCategoryId <= 0)
+			throw new InvalidOperationException("Invalid category id");
+
 		categoryRepository.Update(category);
 	}
 
-	public void DeleteCategory(int id)
+	public void DeleteCategory(int categoryId)
 	{
-		categoryRepository.Delete(id);
+		if (categoryId <= 0)
+			throw new InvalidOperationException("Invalid category id");
+
+		categoryRepository.Delete(categoryId);
 	}
 
-	public Item GetItem(int id)
+	public Item GetItem(int itemId)
 	{
-		return itemRepository.Get(id);
+		if (itemId <= 0)
+			throw new InvalidOperationException("Invalid item id");
+
+		return itemRepository.Get(itemId) ?? throw new InvalidOperationException("Invalid item id");
 	}
 
-	public List<Item> ListItems()
+	public IReadOnlyCollection<Item> ListItems()
 	{
 		return itemRepository.List();
 	}
 
 	public void AddItem(Item item)
 	{
+		if (item.Id <= 0)
+			throw new InvalidOperationException("Invalid item id");
+
+		if (string.IsNullOrWhiteSpace(item.Name))
+			throw new InvalidOperationException("Item name cannot be empty");
+
+		if (item.CategoryId <= 0)
+			throw new InvalidOperationException("Invalid category id");
+
+		if (item.Price <= 0)
+			throw new InvalidOperationException("Item price must be positive");
+
+		if (item.Amount <= 0)
+			throw new InvalidOperationException("Item amount must be positive");
+
 		itemRepository.Add(item);
 	}
 }

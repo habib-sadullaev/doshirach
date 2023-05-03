@@ -1,46 +1,61 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using Doshirach.Catalog.Core.Interfaces;
 using Doshirach.Catalog.Core.Models;
-using Microsoft.Data.SqlClient;
 
 namespace Doshirach.Catalog.Persistence;
 
 public class CategoryRepository : ICategoryRepository
 {
-	private readonly string connectionString;
+	private readonly IDbConnection dbConnection;
 
-	public CategoryRepository(string connectionString)
+	public CategoryRepository(IDbConnection dbConnection)
 	{
-		this.connectionString = connectionString;
+		this.dbConnection = dbConnection;
 	}
 
-	public Category Get(int id)
+	public Category? Get(int id)
 	{
-		using var conn = new SqlConnection(connectionString);
-		return conn.QueryFirstOrDefault<Category>("SELECT * FROM Category WHERE id = @id", new { id });
+		const string getCategory = """
+			SELECT * FROM Category WHERE id = @id
+			""";
+		return dbConnection.QueryFirstOrDefault<Category>(getCategory, new { id });
 	}
 
-	public List<Category> List()
+	public Category[] List()
 	{
-		using var conn = new SqlConnection(connectionString);
-		return conn.Query<Category>("SELECT * FROM Category").ToList();
+		const string selectAllCategories = """
+			SELECT * FROM Category
+			""";
+		return dbConnection.Query<Category>(selectAllCategories).ToArray();
 	}
 
 	public void Add(Category category)
 	{
-		using var conn = new SqlConnection(connectionString);
-		conn.Execute("INSERT INTO Category (name, image, parent_category_id) VALUES (@Name, @Image, @ParentCategoryId)", category);
+		const string insertCategory = """
+			INSERT INTO Category (name, image, parent_category_id)
+			VALUES (@Name, @Image, @ParentCategoryId)
+			""";
+		dbConnection.Execute(insertCategory, category);
 	}
 
 	public void Update(Category category)
 	{
-		using var conn = new SqlConnection(connectionString);
-		conn.Execute("UPDATE Category SET name = @Name, image = @Image, parent_category_id = @ParentCategoryId WHERE id = @Id", category);
+		const string updateCategory = """
+			UPDATE Category
+			SET name = @Name
+				,image = @Image
+				,parent_category_id = @ParentCategoryId
+			WHERE id = @Id
+			""";
+		dbConnection.Execute(updateCategory, category);
 	}
 
 	public void Delete(int id)
 	{
-		using var conn = new SqlConnection(connectionString);
-		conn.Execute("DELETE FROM Category WHERE id = @id", new { id });
+		const string deleteCategory = """
+			DELETE FROM Category WHERE id = @id
+			""";
+		dbConnection.Execute(deleteCategory, new { id });
 	}
 }
