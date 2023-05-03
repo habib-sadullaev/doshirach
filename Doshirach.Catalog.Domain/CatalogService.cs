@@ -35,6 +35,9 @@ public class CatalogService
 		if (string.IsNullOrWhiteSpace(category.Name))
 			throw new InvalidOperationException("Category name cannot be empty");
 
+		if (category.Name.Length > 50)
+			throw new InvalidOperationException("Category name length should be less than 50 characters");
+
 		if (category.ParentCategoryId <= 0)
 			throw new InvalidOperationException("Invalid category id");
 
@@ -83,6 +86,9 @@ public class CatalogService
 
 		if (string.IsNullOrWhiteSpace(item.Name))
 			throw new InvalidOperationException("Item name cannot be empty");
+
+		if (item.Name.Length > 50)
+			throw new InvalidOperationException("Item name length should be less than 50 characters");
 
 		if (item.CategoryId <= 0)
 			throw new InvalidOperationException("Invalid category id");
