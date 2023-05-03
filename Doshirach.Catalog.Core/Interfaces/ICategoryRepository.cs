@@ -4,9 +4,9 @@ namespace Doshirach.Catalog.Core.Interfaces;
 
 public interface ICategoryRepository
 {
-	Category? Get(int id);
-	Category[] List();
-	void Add(Category category);
-	void Update(Category category);
-	void Delete(int id);
+	Task<Category?> GetAsync(int id);
+	Task<Category[]> ListAsync();
+	Task AddAsync(Category category);
+	Task UpdateAsync(Category category);
+	Task DeleteAsync(int id);
 }

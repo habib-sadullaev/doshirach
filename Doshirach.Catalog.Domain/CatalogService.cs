@@ -14,20 +14,20 @@ public class CatalogService
 		this.itemRepository = itemRepository;
 	}
 
-	public Category GetCategory(int categoryId)
+	public async Task<Category> GetCategoryAsync(int categoryId)
 	{
 		if (categoryId <= 0)
 			throw new InvalidOperationException("Invalid category id");
 
-		return categoryRepository.Get(categoryId) ?? throw new InvalidOperationException("Invalid category id");
+		return await categoryRepository.GetAsync(categoryId) ?? throw new InvalidOperationException("Invalid category id");
 	}
 
-	public IReadOnlyCollection<Category> ListCategories()
+	public async Task<Category[]> ListCategoriesAsync()
 	{
-		return categoryRepository.List();
+		return await categoryRepository.ListAsync();
 	}
 
-	public void AddCategory(Category category)
+	public Task AddCategoryAsync(Category category)
 	{
 		if (category.Id <= 0)
 			throw new InvalidOperationException("Invalid category id");
@@ -38,10 +38,10 @@ public class CatalogService
 		if (category.ParentCategoryId <= 0)
 			throw new InvalidOperationException("Invalid category id");
 
-		categoryRepository.Add(category);
+		return categoryRepository.AddAsync(category);
 	}
 
-	public void UpdateCategory(Category category)
+	public Task UpdateCategoryAsync(Category category)
 	{
 		if (category.Id <= 0)
 			throw new InvalidOperationException("Invalid category id");
@@ -52,31 +52,31 @@ public class CatalogService
 		if (category.ParentCategoryId <= 0)
 			throw new InvalidOperationException("Invalid category id");
 
-		categoryRepository.Update(category);
+		return categoryRepository.UpdateAsync(category);
 	}
 
-	public void DeleteCategory(int categoryId)
+	public Task DeleteCategoryAsync(int categoryId)
 	{
 		if (categoryId <= 0)
 			throw new InvalidOperationException("Invalid category id");
 
-		categoryRepository.Delete(categoryId);
+		return categoryRepository.DeleteAsync(categoryId);
 	}
 
-	public Item GetItem(int itemId)
+	public async Task<Item> GetItemAsync(int itemId)
 	{
 		if (itemId <= 0)
 			throw new InvalidOperationException("Invalid item id");
 
-		return itemRepository.Get(itemId) ?? throw new InvalidOperationException("Invalid item id");
+		return await itemRepository.GetAsync(itemId) ?? throw new InvalidOperationException("Invalid item id");
 	}
 
-	public IReadOnlyCollection<Item> ListItems()
+	public async Task<Item[]> ListItemsAsync()
 	{
-		return itemRepository.List();
+		return await itemRepository.ListAsync();
 	}
 
-	public void AddItem(Item item)
+	public Task AddItemAsync(Item item)
 	{
 		if (item.Id <= 0)
 			throw new InvalidOperationException("Invalid item id");
@@ -93,6 +93,6 @@ public class CatalogService
 		if (item.Amount <= 0)
 			throw new InvalidOperationException("Item amount must be positive");
 
-		itemRepository.Add(item);
+		return itemRepository.AddAsync(item);
 	}
 }

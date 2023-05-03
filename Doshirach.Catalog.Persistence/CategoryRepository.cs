@@ -14,32 +14,33 @@ public class CategoryRepository : ICategoryRepository
 		this.dbConnection = dbConnection;
 	}
 
-	public Category? Get(int id)
+	public async Task<Category?> GetAsync(int id)
 	{
 		const string getCategory = """
 			SELECT * FROM Category WHERE id = @id
 			""";
-		return dbConnection.QueryFirstOrDefault<Category>(getCategory, new { id });
+		return await dbConnection.QueryFirstOrDefaultAsync<Category>(getCategory, new { id });
 	}
 
-	public Category[] List()
+	public async Task<Category[]> ListAsync()
 	{
 		const string selectAllCategories = """
 			SELECT * FROM Category
 			""";
-		return dbConnection.Query<Category>(selectAllCategories).ToArray();
+		var result = await dbConnection.QueryAsync<Category>(selectAllCategories);
+		return result.ToArray();
 	}
 
-	public void Add(Category category)
+	public async Task AddAsync(Category category)
 	{
 		const string insertCategory = """
 			INSERT INTO Category (name, image, parent_category_id)
 			VALUES (@Name, @Image, @ParentCategoryId)
 			""";
-		dbConnection.Execute(insertCategory, category);
+		await dbConnection.ExecuteAsync(insertCategory, category);
 	}
 
-	public void Update(Category category)
+	public async Task UpdateAsync(Category category)
 	{
 		const string updateCategory = """
 			UPDATE Category
@@ -48,14 +49,14 @@ public class CategoryRepository : ICategoryRepository
 				,parent_category_id = @ParentCategoryId
 			WHERE id = @Id
 			""";
-		dbConnection.Execute(updateCategory, category);
+		await dbConnection.ExecuteAsync(updateCategory, category);
 	}
 
-	public void Delete(int id)
+	public async Task DeleteAsync(int id)
 	{
 		const string deleteCategory = """
 			DELETE FROM Category WHERE id = @id
 			""";
-		dbConnection.Execute(deleteCategory, new { id });
+		await dbConnection.ExecuteAsync(deleteCategory, new { id });
 	}
 }

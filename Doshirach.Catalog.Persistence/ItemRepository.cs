@@ -14,23 +14,24 @@ public class ItemRepository : IItemRepository
 		this.dbConnection = dbConnection;
 	}
 
-	public Item? Get(int id)
+	public async Task<Item?> GetAsync(int id)
 	{
 		const string getItem = """
 			SELECT * FROM Item WHERE id = @id
 			""";
-		return dbConnection.QueryFirstOrDefault<Item>(getItem, new { id });
+		return await dbConnection.QueryFirstOrDefaultAsync<Item>(getItem, new { id });
 	}
 
-	public Item[] List()
+	public async Task<Item[]> ListAsync()
 	{
 		const string selectAllItems = """
 			SELECT * FROM Item
 			""";
-		return dbConnection.Query<Item>(selectAllItems).ToArray();
+		var result = await dbConnection.QueryAsync<Item>(selectAllItems);
+		return result.ToArray();
 	}
 
-	public void Add(Item item)
+	public async Task AddAsync(Item item)
 	{
 		const string insertItem = """
 			INSERT INTO Item
@@ -52,10 +53,10 @@ public class ItemRepository : IItemRepository
 				,@Amount
 			)
 			""";
-		dbConnection.Execute(insertItem, item);
+		await dbConnection.ExecuteAsync(insertItem, item);
 	}
 
-	public void Update(Item item)
+	public async Task UpdateAsync(Item item)
 	{
 		const string updateItem = """
 			UPDATE Item
@@ -67,14 +68,14 @@ public class ItemRepository : IItemRepository
 				,amount = @Amount 
 			WHERE id = @Id
 			""";
-		dbConnection.Execute(updateItem, item);
+		await dbConnection.ExecuteAsync(updateItem, item);
 	}
 
-	public void Delete(int id)
+	public async Task DeleteAsync(int id)
 	{
 		const string deleteItem = """
 			DELETE FROM Item WHERE id = @id
 			""";
-		dbConnection.Execute(deleteItem, new { id });
+		await dbConnection.ExecuteAsync(deleteItem, new { id });
 	}
 }

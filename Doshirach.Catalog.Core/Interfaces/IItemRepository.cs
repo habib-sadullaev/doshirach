@@ -4,9 +4,9 @@ namespace Doshirach.Catalog.Core.Interfaces;
 
 public interface IItemRepository
 {
-	Item? Get(int id);
-	Item[] List();
-	void Add(Item item);
-	void Update(Item item);
-	void Delete(int id);
+	Task<Item?> GetAsync(int id);
+	Task<Item[]> ListAsync();
+	Task AddAsync(Item item);
+	Task UpdateAsync(Item item);
+	Task DeleteAsync(int id);
 }
