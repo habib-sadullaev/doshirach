@@ -22,12 +22,16 @@ public class ItemRepository : IItemRepository
 		return await dbConnection.QueryFirstOrDefaultAsync<Item>(getItem, new { id });
 	}
 
-	public async Task<Item[]> ListAsync()
+	public async Task<Item[]> ListAsync(int categoryId, int page, int pageSize)
 	{
-		const string selectAllItems = """
+		const string selectCategoryItemsByPage = """
 			SELECT * FROM Item
+			WHERE CategoryId = @categoryId
+			LIMIT @limit OFFSET @offset
 			""";
-		var result = await dbConnection.QueryAsync<Item>(selectAllItems);
+		var result = await dbConnection.QueryAsync<Item>(
+			selectCategoryItemsByPage,
+			new { categoryId, page, limit = pageSize, offset = (page - 1) * pageSize });
 		return result.ToArray();
 	}
 

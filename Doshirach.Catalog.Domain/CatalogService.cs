@@ -14,12 +14,12 @@ public class CatalogService
 		this.itemRepository = itemRepository;
 	}
 
-	public async Task<Category> GetCategoryAsync(int categoryId)
+	public async Task<Category?> GetCategoryAsync(int categoryId)
 	{
 		if (categoryId <= 0)
 			throw new InvalidOperationException("Invalid category id");
 
-		return await categoryRepository.GetAsync(categoryId) ?? throw new InvalidOperationException("Invalid category id");
+		return await categoryRepository.GetAsync(categoryId);
 	}
 
 	public async Task<Category[]> ListCategoriesAsync()
@@ -66,17 +66,17 @@ public class CatalogService
 		return categoryRepository.DeleteAsync(categoryId);
 	}
 
-	public async Task<Item> GetItemAsync(int itemId)
+	public async Task<Item?> GetItemAsync(int itemId)
 	{
 		if (itemId <= 0)
 			throw new InvalidOperationException("Invalid item id");
 
-		return await itemRepository.GetAsync(itemId) ?? throw new InvalidOperationException("Invalid item id");
+		return await itemRepository.GetAsync(itemId);
 	}
 
-	public async Task<Item[]> ListItemsAsync()
+	public async Task<Item[]> ListItemsAsync(int categoryId, int page, int pageSize)
 	{
-		return await itemRepository.ListAsync();
+		return await itemRepository.ListAsync(categoryId, page, pageSize);
 	}
 
 	public Task AddItemAsync(Item item)
@@ -100,5 +100,36 @@ public class CatalogService
 			throw new InvalidOperationException("Item amount must be positive");
 
 		return itemRepository.AddAsync(item);
+	}
+
+	public Task UpdateItemAsync(Item item)
+	{
+		if (item.Id <= 0)
+			throw new InvalidOperationException("Invalid item id");
+
+		if (string.IsNullOrWhiteSpace(item.Name))
+			throw new InvalidOperationException("Item name cannot be empty");
+
+		if (item.Name.Length > 50)
+			throw new InvalidOperationException("Item name length should be less than 50 characters");
+
+		if (item.CategoryId <= 0)
+			throw new InvalidOperationException("Invalid category id");
+
+		if (item.Price <= 0)
+			throw new InvalidOperationException("Item price must be positive");
+
+		if (item.Amount <= 0)
+			throw new InvalidOperationException("Item amount must be positive");
+
+		return itemRepository.UpdateAsync(item);
+	}
+
+	public Task DeleteItemAsync(int id)
+	{
+		if (id <= 0)
+			throw new InvalidOperationException("Invalid item id");
+
+		return itemRepository.DeleteAsync(id);
 	}
 }

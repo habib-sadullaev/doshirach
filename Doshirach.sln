@@ -5,11 +5,13 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Carting", "Doshirach.Carting\Doshirach.Carting.csproj", "{890FC9EF-E94F-4439-B91F-9BA1769F3334}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doshirach.Catalog.Core", "Doshirach.Catalog.Core\Doshirach.Catalog.Core.csproj", "{1E574A4D-D87C-4062-9121-FF237354C006}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Catalog.Core", "Doshirach.Catalog.Core\Doshirach.Catalog.Core.csproj", "{1E574A4D-D87C-4062-9121-FF237354C006}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doshirach.Catalog.Persistence", "Doshirach.Catalog.Persistence\Doshirach.Catalog.Persistence.csproj", "{69E016C1-2133-4485-B508-8030F3763A2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Catalog.Persistence", "Doshirach.Catalog.Persistence\Doshirach.Catalog.Persistence.csproj", "{69E016C1-2133-4485-B508-8030F3763A2A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doshirach.Catalog.Domain", "Doshirach.Catalog.Domain\Doshirach.Catalog.Domain.csproj", "{699024DD-4474-403A-8B63-6F3F779F7748}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Catalog.Domain", "Doshirach.Catalog.Domain\Doshirach.Catalog.Domain.csproj", "{699024DD-4474-403A-8B63-6F3F779F7748}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doshirach.Catalog.Api", "Doshirach.Catalog.Api\Doshirach.Catalog.Api.csproj", "{9221A2DD-988B-426E-A30C-3D266CEC5B9E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{699024DD-4474-403A-8B63-6F3F779F7748}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{699024DD-4474-403A-8B63-6F3F779F7748}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{699024DD-4474-403A-8B63-6F3F779F7748}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9221A2DD-988B-426E-A30C-3D266CEC5B9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9221A2DD-988B-426E-A30C-3D266CEC5B9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9221A2DD-988B-426E-A30C-3D266CEC5B9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9221A2DD-988B-426E-A30C-3D266CEC5B9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
