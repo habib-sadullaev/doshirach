@@ -1,6 +1,6 @@
 ﻿namespace Doshirach.Carting.Core.Models;
 
-public class CartItem
+public record CartItem
 {
 	public required int Id { get; init; }
 	public required int CartId { get; init; }

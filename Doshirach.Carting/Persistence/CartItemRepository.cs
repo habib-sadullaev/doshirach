@@ -16,7 +16,7 @@ public class CartItemRepository : ICartItemRepository
 
 	public CartItem[] GetCartItems(int cartId) => cartItems.Find(i => i.CartId == cartId).ToArray();
 
-	public void AddCartItem(CartItem cartItem)
+	public bool AddCartItem(CartItem cartItem)
 	{
 		var id = new BsonValue((cartItem.CartId, cartItem.Id));
 
@@ -25,14 +25,13 @@ public class CartItemRepository : ICartItemRepository
 			case { } existingCartItem:
 				existingCartItem.Quantity += cartItem.Quantity;
 				existingCartItem.Price = cartItem.Price;
-				cartItems.Update(id, existingCartItem);
-				break;
+				return cartItems.Update(id, existingCartItem);
 
 			case null:
 				cartItems.Insert(id, cartItem);
-				break;
+				return true;
 		}
 	}
 
-	public void RemoveCartItem(int cartItemId) => cartItems.Delete(cartItemId);
+	public bool RemoveCartItem(int cartItemId) => cartItems.Delete(cartItemId);
 }
