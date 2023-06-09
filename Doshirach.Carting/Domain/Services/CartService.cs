@@ -5,26 +5,12 @@ namespace Doshirach.Carting.Domain.Services;
 
 public class CartService
 {
-	private readonly ICartRepository cartRepository;
 	private readonly ICartItemRepository cartItemRepository;
 
-	public CartService(ICartRepository cartRepository, ICartItemRepository cartItemRepository)
+	public CartService(ICartItemRepository cartItemRepository)
 	{
-		this.cartRepository = cartRepository;
 		this.cartItemRepository = cartItemRepository;
 	}
-
-	public Cart CreateCart(int cartId)
-	{
-		if (cartId <= 0) throw new InvalidOperationException("Invalid cart id");
-
-		return cartRepository.CreateCart(cartId);
-	}
-
-	public Cart? GetCart(int cartId)
-		=> cartRepository.GetCart(cartId);
-
-	private void CheckCart(int cartId) => GetCart(cartId);
 
 	public CartItem[] GetCartItems(int cartId)
 	{
@@ -33,30 +19,45 @@ public class CartService
 		return cartItemRepository.GetCartItems(cartId);
 	}
 
-	public bool AddCartItem(CartItem cartItem)
+	public CartItem AddCartItem(int cartId, Item item, int quantity)
 	{
-		if (cartItem.Id <= 0)
+		if (item.Id <= 0)
 			throw new InvalidOperationException("Invalid item id");
 
-		if (string.IsNullOrEmpty(cartItem.Name))
+		if (string.IsNullOrEmpty(item.Name))
 			throw new InvalidOperationException("Item name cannot be empty");
 
-		if (cartItem.Price <= 0)
+		if (item.Price <= 0)
 			throw new InvalidOperationException("Item price must be positive");
 
-		if (cartItem.Quantity <= 0)
+		if (quantity <= 0)
 			throw new InvalidOperationException("Item quantity must be positive");
 
-		CheckCart(cartItem.CartId);
-
-		return cartItemRepository.AddCartItem(cartItem);
+		return cartItemRepository.AddCartItem(cartId, item, quantity);
 	}
 
-	public bool RemoveCartItem(int cartItemId)
+	public bool RemoveCartItem(int cartId, int itemId)
 	{
-		if (cartItemId <= 0)
+		if (cartId <= 0)
+			throw new InvalidOperationException("Invalid cart id");
+
+		if (itemId <= 0)
 			throw new InvalidOperationException("Invalid item id");
 
-		return cartItemRepository.RemoveCartItem(cartItemId);
+		return cartItemRepository.RemoveCartItem(cartId, itemId);
+	}
+
+	public void UpdateItem(Item item)
+	{
+		if (item.Id <= 0)
+			throw new InvalidOperationException("Invalid item id");
+
+		if (string.IsNullOrEmpty(item.Name))
+			throw new InvalidOperationException("Item name cannot be empty");
+
+		if (item.Price <= 0)
+			throw new InvalidOperationException("Item price must be positive");
+
+		cartItemRepository.UpdateItem(item);
 	}
 }

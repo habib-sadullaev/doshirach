@@ -63,13 +63,16 @@ public static class Items
 			return Results.NoContent();
 		});
 
-		app.MapPut("categories/{categoryId}/items/{id}", async ([FromServices] CatalogService catalogService, Item item) =>
+		app.MapPut("categories/{categoryId}/items/{id}", async (
+			[FromServices] CatalogService catalogService,
+			[FromServices] Publisher publisher,
+			Item item) =>
 		{
+			await publisher.ExecuteAsync("PUT", item);
 			if (await catalogService.GetItemAsync(item.Id) is not { } existingItem || existingItem.CategoryId != item.CategoryId)
 				return Results.NotFound();
 
 			await catalogService.UpdateItemAsync(item);
-
 			return Results.NoContent();
 		});
 

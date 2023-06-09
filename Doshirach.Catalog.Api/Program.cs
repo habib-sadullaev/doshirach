@@ -1,20 +1,21 @@
 using System.Data;
 using Doshirach.Catalog.Api;
 using Doshirach.Catalog.Core.Interfaces;
-using Doshirach.Catalog.Core.Models;
 using Doshirach.Catalog.Domain;
 using Doshirach.Catalog.Persistence;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
+var configuration = builder.Configuration;
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IDbConnection>(_ => new SqliteConnection("Data Source=catalog.db"));
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IItemRepository, ItemRepository>();
-builder.Services.AddScoped<CatalogService>();
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+services.AddScoped<IDbConnection>(_ => new SqliteConnection(configuration.GetConnectionString("Sqlite")));
+services.AddScoped<ICategoryRepository, CategoryRepository>();
+services.AddScoped<IItemRepository, ItemRepository>();
+services.AddScoped<CatalogService>();
+services.AddSingleton(_ =>  new Publisher(configuration.GetConnectionString("ServiceBus")!));
 
 var app = builder.Build();
 

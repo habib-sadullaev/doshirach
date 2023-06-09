@@ -20,64 +20,63 @@ public class CartController : ControllerBase
 
 	[HttpGet("{cartKey}")]
 	[MapToApiVersion("1.0")]
-	public ActionResult<Cart> GetCart(string cartKey)
-		=> int.TryParse(cartKey, out var id) && cartService.GetCart(id) is { } cart
+	public ActionResult GetCart(string cartKey)
+		=> int.TryParse(cartKey, out var cartId)
 			? Ok(new
 			{
-				CartKey = id.ToString(),
-				CartItems = from item in cart.Items
-								select new
-								{
-									ItemKey = item.Id.ToString(),
-									item.Name,
-									item.Image,
-									item.Price,
-									item.Quantity,
-								}
+				CartKey = cartKey,
+				CartItems =
+					from cartItem in cartService.GetCartItems(cartId)
+					select new
+					{
+						ItemKey = cartItem.Item.Id.ToString(),
+						Name = cartItem.Item.Name,
+						Image = cartItem.Item.Image,
+						Price = cartItem.Item.Price,
+						Quantity = cartItem.Quantity,
+					}
 			})
 			: NotFound();
 
 	[HttpGet("{cartKey}/items")]
 	[MapToApiVersion("2.0")]
-	public ActionResult<CartItem[]> GetCartItems(string cartKey)
-		=> int.TryParse(cartKey, out var id) && cartService.GetCartItems(id) is var cartItems
-			? Ok(from item in cartItems
-				  select new
-				  {
-					  ItemKey = item.Id.ToString(),
-					  item.Name,
-					  item.Image,
-					  item.Price,
-					  item.Quantity,
-				  })
+	public ActionResult GetCartItems(string cartKey)
+		=> int.TryParse(cartKey, out var cartId)
+			? Ok(from cartItem in cartService.GetCartItems(cartId)
+				select new
+				{
+					ItemKey = cartItem.Item.Id.ToString(),
+					Name = cartItem.Item.Name,
+					Image = cartItem.Item.Image,
+					Price = cartItem.Item.Price,
+					Quantity = cartItem.Quantity,
+				})
 			: Ok(Array.Empty<CartItem>());
 
 	[HttpPost("{cartKey}/items/{itemKey}")]
-	public ActionResult AddCartItem(string cartKey, string itemKey, CartItem item)
+	public ActionResult<CartItem> AddCartItem(string cartKey, string itemKey, Item item, int quantity)
 	{
-		if (!int.TryParse(cartKey, out var id))
+		if (!int.TryParse(cartKey, out var cartId))
 			return BadRequest();
 
 		if (!int.TryParse(itemKey, out var itemId))
 			return BadRequest();
 
-		item = item with { Id = itemId, CartId = id };
-		if (!cartService.AddCartItem(item))
-			return BadRequest();
+		var cartItem = cartService.AddCartItem(cartId, item with { Id = itemId }, quantity);
 
-		return Ok();
+		return Ok(cartItem);
 	}
 
 	[HttpDelete("{cartKey}/items/{itemKey}")]
 	public ActionResult DeleteCartItem(string cartKey, string itemKey)
 	{
-		if (!int.TryParse(cartKey, out _))
+		if (!int.TryParse(cartKey, out var cartId))
 			return NotFound();
 
 		if (!int.TryParse(itemKey, out var itemId))
 			return NotFound();
 
-		if (!cartService.RemoveCartItem(itemId))
+		if (!cartService.RemoveCartItem(cartId, itemId))
 			return NotFound();
 
 		return Ok();
