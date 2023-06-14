@@ -1,9 +1,12 @@
 using System.Data;
+using System.Net.Http.Headers;
 using System.Security.Claims;
+using System.Text.Json;
 using Doshirach.Catalog.Api;
 using Doshirach.Catalog.Core.Interfaces;
 using Doshirach.Catalog.Domain;
 using Doshirach.Catalog.Persistence;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.Data.Sqlite;
 using Microsoft.IdentityModel.Tokens;
@@ -80,6 +83,12 @@ services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
+const string myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+services.AddCors(options => options.AddPolicy(
+	myAllowSpecificOrigins, 
+	policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -88,6 +97,10 @@ if (app.Environment.IsDevelopment())
 	app.UseSwaggerUI();
 }
 
+app.UseHttpsRedirection();
+
+app.UseCors(myAllowSpecificOrigins);
+
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -95,5 +108,12 @@ app.AddCategoryEndpints();
 app.AddItemEndPoints();
 
 app.MapGet("/Account/AccessDenied", () => "Access denied");
+
+app.MapGet("/token", async (HttpContext httpContext) =>
+{
+	var accessToken = await httpContext.GetTokenAsync("access_token");
+	
+	return Results.Ok(accessToken);
+});
 
 app.Run();
