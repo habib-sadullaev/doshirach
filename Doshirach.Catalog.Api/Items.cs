@@ -27,7 +27,7 @@ public static class Items
 							 new { Rel = "category", Url = $"categories/{categoryId}" },
 						 },
 					 };
-		});
+		}).RequireAuthorization("Manager", "Buyer");
 
 		app.MapGet("categories/{categoryId}/items/{id}", async ([FromServices] CatalogService catalogService, int categoryId, int id) =>
 		{
@@ -48,7 +48,7 @@ public static class Items
 					new { Rel = "category", Url = $"categories/{categoryId}" },
 				},
 			});
-		});
+		}).RequireAuthorization("Manager", "Buyer");
 
 		app.MapPost("categories/{categoryId}/items", async ([FromServices] CatalogService catalogService, Item item) =>
 		{
@@ -61,7 +61,7 @@ public static class Items
 			await catalogService.AddItemAsync(item);
 
 			return Results.NoContent();
-		});
+		}).RequireAuthorization("Manager");
 
 		app.MapPut("categories/{categoryId}/items/{id}", async ([FromServices] CatalogService catalogService, Item item) =>
 		{
@@ -81,6 +81,6 @@ public static class Items
 			await catalogService.DeleteItemAsync(id);
 
 			return Results.NoContent();
-		});
+		}).RequireAuthorization("Manager");
 	}
 }

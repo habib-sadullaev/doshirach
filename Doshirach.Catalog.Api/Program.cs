@@ -58,12 +58,18 @@ services.AddAuthentication(options =>
 	});
 
 builder.Services.AddAuthorization(options =>
+{
 	options.AddPolicy("Manager", policy =>
 	{
 		policy.RequireAuthenticatedUser();
 		policy.RequireRole("Manager");
-	})
-);
+	});
+	options.AddPolicy("Buyer", policy =>
+	{
+		policy.RequireAuthenticatedUser();
+		policy.RequireRole("Buyer");
+	});
+});
 
 var app = builder.Build();
 
@@ -78,16 +84,7 @@ app.UseAuthorization();
 
 app.AddCategoryEndpints();
 app.AddItemEndPoints();
-app
-	.MapGet(
-		"/identity",
-		(ClaimsPrincipal user) => Results.Json(from c in user.Claims select new { c.Type, c.Value }))
-	.RequireAuthorization("Manager");
 
-app
-	.MapGet(
-		"/identity2",
-		(ClaimsPrincipal user) => Results.Json(from c in user.Claims select new { c.Type, c.Value }))
-	.RequireAuthorization();
+app.MapGet("/Account/AccessDenied", () => "Access denied");
 
 app.Run();

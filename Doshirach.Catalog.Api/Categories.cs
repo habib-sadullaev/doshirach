@@ -25,7 +25,7 @@ public static class Categories
 							 new { Rel = "category items", Uri = $"/categories/{category.Id}/items" },
 						 },
 					 };
-		});
+		}).RequireAuthorization("Manager", "Buyer");
 
 		app.MapPost("/categories", async ([FromServices] CatalogService catalogService, Category category) =>
 		{
@@ -35,7 +35,7 @@ public static class Categories
 			await catalogService.AddCategoryAsync(category);
 
 			return Results.Created($"/categories/{category.Id}", category);
-		});
+		}).RequireAuthorization("Manager");
 
 		app.MapGet("/categories/{id}", async ([FromServices] CatalogService catalogService, int id) =>
 		{
@@ -54,7 +54,7 @@ public static class Categories
 					new { Rel = "items", Uri = $"/categories/{category.Id}/items" },
 				},
 			});
-		});
+		}).RequireAuthorization("Manager", "Buyer");
 
 		app.MapPut("/categories/{id}", async ([FromServices] CatalogService catalogService, Category category) =>
 		{
@@ -64,7 +64,7 @@ public static class Categories
 			await catalogService.UpdateCategoryAsync(category);
 
 			return Results.NoContent();
-		});
+		}).RequireAuthorization("Manager");
 
 		app.MapDelete("/categories/{id}", async ([FromServices] CatalogService catalogService, int id) =>
 		{
@@ -74,6 +74,6 @@ public static class Categories
 			await catalogService.DeleteCategoryAsync(id);
 
 			return Results.NoContent();
-		});
+		}).RequireAuthorization("Manager");
 	}
 }
