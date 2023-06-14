@@ -4,7 +4,7 @@ using Doshirach.Catalog.Api;
 using Doshirach.Catalog.Core.Interfaces;
 using Doshirach.Catalog.Domain;
 using Doshirach.Catalog.Persistence;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.Data.Sqlite;
 using Microsoft.IdentityModel.Tokens;
 
@@ -20,15 +20,11 @@ services.AddScoped<CatalogService>();
 
 services.AddAuthentication(options =>
 	{
-		options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-		options.DefaultAuthenticateScheme = "oidc";
+		options.DefaultScheme = "Cookies";
+		options.DefaultChallengeScheme = "oidc";
+		options.DefaultSignOutScheme = "oidc";
 	})
-	.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-	{
-		options.Authority = "https://localhost:5001";
-		options.TokenValidationParameters.ValidateAudience = false;
-		options.RequireHttpsMetadata = false;
-	})
+	.AddCookie("Cookies")
 	.AddOpenIdConnect("oidc", options =>
 	{
 		options.Authority = "https://localhost:5001";
@@ -39,23 +35,33 @@ services.AddAuthentication(options =>
 
 		options.Scope.Add("openid");
 		options.Scope.Add("profile");
+		options.Scope.Add("offline_access");
 		options.Scope.Add("api1");
+		options.Scope.Add("role");
 
 		options.GetClaimsFromUserInfoEndpoint = true;
 		options.SaveTokens = true;
+
+		options.ClaimActions.Add(new JsonKeyClaimAction("role", "role", "role"));
 
 		options.TokenValidationParameters = new TokenValidationParameters
 		{
 			NameClaimType = "name",
 			RoleClaimType = "role"
 		};
+
+		//// ignore self-signed ssl
+		//options.BackchannelHttpHandler = new HttpClientHandler
+		//{
+		//	ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+		//};
 	});
 
 builder.Services.AddAuthorization(options =>
-	options.AddPolicy("ApiScope", policy =>
+	options.AddPolicy("Manager", policy =>
 	{
 		policy.RequireAuthenticatedUser();
-		policy.RequireClaim("scope", "api1");
+		policy.RequireRole("Manager");
 	})
 );
 
@@ -76,6 +82,12 @@ app
 	.MapGet(
 		"/identity",
 		(ClaimsPrincipal user) => Results.Json(from c in user.Claims select new { c.Type, c.Value }))
-	.RequireAuthorization("ApiScope");
+	.RequireAuthorization("Manager");
+
+app
+	.MapGet(
+		"/identity2",
+		(ClaimsPrincipal user) => Results.Json(from c in user.Claims select new { c.Type, c.Value }))
+	.RequireAuthorization();
 
 app.Run();

@@ -1,5 +1,6 @@
 ﻿using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
+using IdentityModel;
 
 namespace Doshirach.IdentityServer
 {
@@ -10,6 +11,14 @@ namespace Doshirach.IdentityServer
 			 {
 				new IdentityResources.OpenId(),
 				new IdentityResources.Profile(),
+				new ()
+				{
+					Name = "role",
+					DisplayName = "User role",
+					Description = "Your user role information",
+					Emphasize = true,
+					UserClaims = { "role", JwtClaimTypes.Role },
+				}
 			 };
 
 		public static IEnumerable<ApiScope> ApiScopes =>
@@ -36,6 +45,7 @@ namespace Doshirach.IdentityServer
 					{
 						IdentityServerConstants.StandardScopes.OpenId,
 						IdentityServerConstants.StandardScopes.Profile,
+						"role",
 						"api1",
 					},
 				},
