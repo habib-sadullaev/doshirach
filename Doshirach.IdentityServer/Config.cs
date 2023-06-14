@@ -1,4 +1,5 @@
-﻿using Duende.IdentityServer.Models;
+﻿using Duende.IdentityServer;
+using Duende.IdentityServer.Models;
 
 namespace Doshirach.IdentityServer
 {
@@ -14,40 +15,29 @@ namespace Doshirach.IdentityServer
 		public static IEnumerable<ApiScope> ApiScopes =>
 			 new ApiScope[]
 			 {
-				new ApiScope("appScope"),
+				 new("api1", "My API") ,
 			 };
 
 		public static IEnumerable<Client> Clients =>
-			 new Client[]
-			 {
-            new Client
+			new Client[] {
+				new()
 				{
-					 ClientId = "catalog",
-					 ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
+					ClientId = "catalog",
+					ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
 
-					 AllowedGrantTypes = GrantTypes.Code,
+					AllowedGrantTypes = GrantTypes.Code,
 
-					 RedirectUris = { "https://localhost:5242/signin-oidc" },
-					 FrontChannelLogoutUri = "https://localhost:5242/signout-oidc",
-					 PostLogoutRedirectUris = { "https://localhost:5242/signout-callback-oidc" },
+					RedirectUris = { "https://localhost:5242/signin-oidc" },
+					FrontChannelLogoutUri = "https://localhost:5242/signout-oidc",
+					PostLogoutRedirectUris = { "https://localhost:5242/signout-callback-oidc" },
 
-					 AllowOfflineAccess = true,
-					 AllowedScopes = { "openid", "profile", "appScope" }
-				},
-
-				new Client
-				{
-					 ClientId = "carting",
-					 ClientSecrets = { new Secret("49C1A7E1-0C79-4A89-A3D6-A37998FB86B0".Sha256()) },
-
-					 AllowedGrantTypes = GrantTypes.Code,
-
-					 RedirectUris = { "https://localhost:5005/signin-oidc" },
-					 FrontChannelLogoutUri = "https://localhost:5005/signout-oidc",
-					 PostLogoutRedirectUris = { "https://localhost:5005/signout-callback-oidc" },
-
-					 AllowOfflineAccess = true,
-					 AllowedScopes = { "openid", "profile", "appScope" }
+					AllowOfflineAccess = true,
+					AllowedScopes =
+					{
+						IdentityServerConstants.StandardScopes.OpenId,
+						IdentityServerConstants.StandardScopes.Profile,
+						"api1",
+					},
 				},
 			 };
 	}

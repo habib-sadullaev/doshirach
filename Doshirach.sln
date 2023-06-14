@@ -13,9 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Catalog.Domain", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Catalog.Api", "Doshirach.Catalog.Api\Doshirach.Catalog.Api.csproj", "{9221A2DD-988B-426E-A30C-3D266CEC5B9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doshirach.Carting.Api", "Doshirach.Carting.Api\Doshirach.Carting.Api.csproj", "{97F459C6-89BB-4D07-9F0B-B1BB1CBAE2C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Carting.Api", "Doshirach.Carting.Api\Doshirach.Carting.Api.csproj", "{97F459C6-89BB-4D07-9F0B-B1BB1CBAE2C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doshirach.IdentityServer", "Doshirach.IdentityServer\Doshirach.IdentityServer.csproj", "{5A28745E-3B91-4D49-B96C-CE8AC409D4AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.IdentityServer", "Doshirach.IdentityServer\Doshirach.IdentityServer.csproj", "{5A28745E-3B91-4D49-B96C-CE8AC409D4AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
