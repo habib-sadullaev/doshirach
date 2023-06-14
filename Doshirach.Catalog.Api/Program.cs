@@ -7,12 +7,39 @@ using Doshirach.Catalog.Persistence;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Microsoft.Data.Sqlite;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
+services.AddSwaggerGen(option =>
+{
+	option.SwaggerDoc("v1", new OpenApiInfo { Title = "Catalog API", Version = "v1" });
+	option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+	{
+		In = ParameterLocation.Header,
+		Description = "Please enter a valid token",
+		Name = "Authorization",
+		Type = SecuritySchemeType.Http,
+		BearerFormat = "JWT",
+		Scheme = "Bearer"
+	});
+	option.AddSecurityRequirement(new OpenApiSecurityRequirement
+	{
+		{
+			new OpenApiSecurityScheme
+			{
+				Reference = new OpenApiReference
+				{
+					Type=ReferenceType.SecurityScheme,
+					Id="Bearer"
+				}
+			},
+			new string[] { }
+		}
+	});
+});
 services.AddScoped<IDbConnection>(_ => new SqliteConnection("Data Source=catalog.db"));
 services.AddScoped<ICategoryRepository, CategoryRepository>();
 services.AddScoped<IItemRepository, ItemRepository>();
@@ -51,19 +78,7 @@ services.AddAuthentication(options =>
 		};
 	});
 
-builder.Services.AddAuthorization(options =>
-{
-	options.AddPolicy("Manager", policy =>
-	{
-		policy.RequireAuthenticatedUser();
-		policy.RequireRole("Manager");
-	});
-	options.AddPolicy("Buyer", policy =>
-	{
-		policy.RequireAuthenticatedUser();
-		policy.RequireRole("Buyer");
-	});
-});
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
