@@ -49,12 +49,6 @@ services.AddAuthentication(options =>
 			NameClaimType = "name",
 			RoleClaimType = "role"
 		};
-
-		//// ignore self-signed ssl
-		//options.BackchannelHttpHandler = new HttpClientHandler
-		//{
-		//	ServerCertificateCustomValidationCallback = (_, _, _, _) => true
-		//};
 	});
 
 builder.Services.AddAuthorization(options =>
