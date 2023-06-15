@@ -14,10 +14,10 @@ namespace Doshirach.Carting.Grpc.Server.Services
 			this.logger = logger;
 		}
 
-		public override Task<GetCartItemsRespone> GetCartItems(GetCartItemsRequest request, ServerCallContext context)
+		public override Task<GetCartItemsResponse> GetCartItems(GetCartItemsRequest request, ServerCallContext context)
 		{
 			logger.LogInformation("receiving cart items...");
-			return Task.FromResult(new GetCartItemsRespone
+			return Task.FromResult(new GetCartItemsResponse
 			{
 				CartItems =
 				{

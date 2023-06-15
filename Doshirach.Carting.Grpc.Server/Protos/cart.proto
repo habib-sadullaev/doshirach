@@ -7,7 +7,7 @@ option csharp_namespace = "Doshirach.Carting.Grpc";
 package carting;
 
 service CartService {
-  rpc GetCartItems (GetCartItemsRequest) returns (GetCartItemsRespone);
+  rpc GetCartItems (GetCartItemsRequest) returns (GetCartItemsResponse);
 }
 
 message GetCartItemsRequest {
@@ -15,6 +15,7 @@ message GetCartItemsRequest {
 }
 
 message GetCartItemsRespone {
+message GetCartItemsResponse {
   repeated CartItem cartItems = 1;
 }
 
