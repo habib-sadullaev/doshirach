@@ -40,8 +40,7 @@ public class ItemsListener : BackgroundService
 		
 		message = await JsonSerializer.DeserializeAsync(rawStream, messageType) switch
 		{
-			null => throw new InvalidOperationException("Invalid message"),
-			var value => (dynamic)value,
+			var value => (dynamic)value!,
 		};
 
 		switch (message.Method)
