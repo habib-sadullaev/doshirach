@@ -1,6 +1,6 @@
 using Doshirach.Carting.Core.Interfaces;
 using Doshirach.Carting.Domain.Services;
-using Doshirach.Carting.Grpc.Server.Services;
+using Doshirach.Carting.Grpc.Services;
 using Doshirach.Carting.Persistence;
 using LiteDB;
 

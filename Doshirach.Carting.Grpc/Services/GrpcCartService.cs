@@ -1,7 +1,7 @@
 using Grpc.Core;
 using CartServiceBase = Doshirach.Carting.Grpc.CartService.CartServiceBase;
 
-namespace Doshirach.Carting.Grpc.Server.Services;
+namespace Doshirach.Carting.Grpc.Services;
 
 public class GrpcCartService : CartServiceBase
 {
