@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+import "google/type/money.proto";
+
+option csharp_namespace = "Doshirach.Carting.Grpc";
+
+package carting;
+
+service CartService {
+  rpc GetCartItems (GetCartItemsRequest) returns (GetCartItemsRespone);
+}
+
+message GetCartItemsRequest {
+  int32 cartId = 1;
+}
+
+message GetCartItemsRespone {
+  repeated CartItem cartItems = 1;
+}
+
+message CartItem {
+	int32 cartId = 1;
+	int32 id = 2;
+	string name = 3;
+	optional Image image = 4;
+	google.type.Money price = 5;
+	int32 amount = 6;
+	int32 quantity = 7;
+}
+
+message Image {
+	string Url = 1;
+	string Text = 2;
+}
