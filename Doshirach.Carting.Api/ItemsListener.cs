@@ -35,7 +35,15 @@ public class ItemsListener : BackgroundService
 	async Task MessageHandler(ProcessMessageEventArgs args)
 	{
 		var message = new { Method = default(string)!, Item = default(Item)! };
-		message = (dynamic)(await JsonSerializer.DeserializeAsync(args.Message.Body.ToStream(), message.GetType()))!;
+		var rawStream = args.Message.Body.ToStream();
+		var messageType = message.GetType();
+		
+		message = await JsonSerializer.DeserializeAsync(rawStream, messageType) switch
+		{
+			null => throw new InvalidOperationException("Invalid message"),
+			var value => (dynamic)value,
+		};
+
 		switch (message.Method)
 		{
 			case WebRequestMethods.Http.Put:

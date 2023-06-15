@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace Doshirach.Carting.Api.Controllers;
 
 [ApiController]
-//[Route("api/[controller]")]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("1.0")]
 [ApiVersion("2.0")]
@@ -30,10 +29,11 @@ public class CartController : ControllerBase
 					select new
 					{
 						ItemKey = cartItem.Item.Id.ToString(),
-						Name = cartItem.Item.Name,
-						Image = cartItem.Item.Image,
-						Price = cartItem.Item.Price,
-						Quantity = cartItem.Quantity,
+						cartItem.Item.Name,
+						cartItem.Item.Image,
+						cartItem.Item.Price,
+						cartItem.Quantity,
+						cartItem.Item.Amount,
 					}
 			})
 			: NotFound();
@@ -43,14 +43,15 @@ public class CartController : ControllerBase
 	public ActionResult GetCartItems(string cartKey)
 		=> int.TryParse(cartKey, out var cartId)
 			? Ok(from cartItem in cartService.GetCartItems(cartId)
-				select new
-				{
-					ItemKey = cartItem.Item.Id.ToString(),
-					Name = cartItem.Item.Name,
-					Image = cartItem.Item.Image,
-					Price = cartItem.Item.Price,
-					Quantity = cartItem.Quantity,
-				})
+				  select new
+				  {
+					  ItemKey = cartItem.Item.Id.ToString(),
+					  cartItem.Item.Name,
+					  cartItem.Item.Image,
+					  cartItem.Item.Price,
+					  cartItem.Quantity,
+					  cartItem.Item.Amount,
+				  })
 			: Ok(Array.Empty<CartItem>());
 
 	[HttpPost("{cartKey}/items/{itemKey}")]
