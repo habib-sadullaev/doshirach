@@ -16,11 +16,13 @@ public class GrpcCartService : CartServiceBase
 
 	public override Task<CartItemsResponse> GetCartItems(GetCartItemsRequest request, ServerCallContext context)
 	{
-		return Task.FromResult(GetCartItems(request.CartId));
+		return Task.FromResult(GetCartItems(request.CartId, context.CancellationToken));
 	}
 
 	public override Task<CartItemsResponse> AddCartItem(AddCartItemRequest request, ServerCallContext context)
 	{
+		context.CancellationToken.ThrowIfCancellationRequested();
+
 		logger.LogInformation("adding an item to the cart {cartId}...", request.CartItem.CartId);
 
 		var cartItem = cartService.AddCartItem(
@@ -39,32 +41,43 @@ public class GrpcCartService : CartServiceBase
 			cartItem.CartId,
 			cartItem.Item.Id);
 
-		return Task.FromResult(GetCartItems(cartItem.CartId));
+		return Task.FromResult(GetCartItems(cartItem.CartId, context.CancellationToken));
 	}
 
-	private CartItemsResponse GetCartItems(int cartId)
+	private CartItemsResponse GetCartItems(int cartId, CancellationToken cancellationToken)
 	{
+		cancellationToken.ThrowIfCancellationRequested();
+
 		logger.LogInformation("receiving items in the cart {cartId}...", cartId);
 
 		var cartItems =
-			(from cartItem in cartService.GetCartItems(cartId)
-			 select new CartItem
-			 {
-				 CartId = cartItem.CartId,
-				 Id = cartItem.Item.Id,
-				 Name = cartItem.Item.Name,
-				 Image = new()
-				 {
-					 Url = cartItem.Item.Image.Url,
-					 Text = cartItem.Item.Image.Text,
-				 },
-				 Price = cartItem.Item.Price,
-				 Amount = cartItem.Item.Amount,
-				 Quantity = cartItem.Quantity,
-			 }).ToList();
+			from cartItem in cartService.GetCartItems(cartId)
+			select new CartItem
+			{
+				CartId = cartItem.CartId,
+				Id = cartItem.Item.Id,
+				Name = cartItem.Item.Name,
+				Image = new()
+				{
+					Url = cartItem.Item.Image.Url,
+					Text = cartItem.Item.Image.Text,
+				},
+				Price = cartItem.Item.Price,
+				Amount = cartItem.Item.Amount,
+				Quantity = cartItem.Quantity,
+			};
+
+		var response = new CartItemsResponse();
+
+		foreach (var cartItem in cartItems)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			response.CartItems.Add(cartItem);
+		}
 
 		logger.LogInformation("cart {cartId} items have been received", cartId);
 
-		return new() { CartItems = { cartItems } };
+		return response;
 	}
 }
