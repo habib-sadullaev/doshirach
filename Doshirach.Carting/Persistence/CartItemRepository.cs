@@ -1,6 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using Doshirach.Carting.Core.Interfaces;
 using Doshirach.Carting.Core.Models;
-using Doshirach.Carting.Core.Interfaces;
 using LiteDB;
 
 namespace Doshirach.Carting.Persistence;
@@ -10,9 +9,8 @@ public class CartItemRepository : ICartItemRepository
 	private readonly ILiteCollection<CartItem> cartItems;
 	private readonly ILiteCollection<Item> items;
 
-	public CartItemRepository(string connectionString)
+	public CartItemRepository(ILiteDatabase db)
 	{
-		var db = new LiteDatabase(connectionString);
 		cartItems = db.GetCollection<CartItem>();
 		items = db.GetCollection<Item>();
 	}
