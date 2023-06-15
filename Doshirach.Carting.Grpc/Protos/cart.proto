@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "google/protobuf/empty.proto";
 import "google/type/money.proto";
 
 option csharp_namespace = "Doshirach.Carting.Grpc";
