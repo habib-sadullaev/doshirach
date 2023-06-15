@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import "google/protobuf/empty.proto";
 import "google/type/money.proto";
 
 option csharp_namespace = "Doshirach.Carting.Grpc";
@@ -7,15 +8,19 @@ option csharp_namespace = "Doshirach.Carting.Grpc";
 package carting;
 
 service CartService {
-  rpc GetCartItems (GetCartItemsRequest) returns (GetCartItemsResponse);
+  rpc GetCartItems (GetCartItemsRequest) returns (CartItemsResponse);
+  rpc AddCartItem (AddCartItemRequest) returns (CartItemsResponse);
 }
 
 message GetCartItemsRequest {
   int32 cartId = 1;
 }
 
-message GetCartItemsRespone {
-message GetCartItemsResponse {
+message AddCartItemRequest {
+  CartItem cartItem = 1;
+}
+
+message CartItemsResponse {
   repeated CartItem cartItems = 1;
 }
 

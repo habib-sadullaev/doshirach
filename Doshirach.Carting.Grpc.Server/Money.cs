@@ -11,4 +11,6 @@ public sealed partial class Money
 
 		return new() { Units = units, Nanos = nanos };
 	}
+
+	public static implicit operator decimal(Money value) => value.Units + value.Nanos / NanoFactor;
 }
