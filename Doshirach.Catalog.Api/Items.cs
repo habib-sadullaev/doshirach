@@ -69,11 +69,11 @@ public static class Items
 			[FromServices] Publisher publisher,
 			Item item) =>
 		{
-			await publisher.ExecuteAsync(WebRequestMethods.Http.Put, item);
 			if (await catalogService.GetItemAsync(item.Id) is not { } existingItem || existingItem.CategoryId != item.CategoryId)
 				return Results.NotFound();
 
 			await catalogService.UpdateItemAsync(item);
+			await publisher.ExecuteAsync(WebRequestMethods.Http.Put, item);
 			return Results.NoContent();
 		});
 
