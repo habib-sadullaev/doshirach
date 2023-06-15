@@ -1,4 +1,5 @@
-﻿using Doshirach.Catalog.Core.Models;
+﻿using System.Net;
+using Doshirach.Catalog.Core.Models;
 using Doshirach.Catalog.Domain;
 using Microsoft.AspNetCore.Mvc;
 
@@ -68,7 +69,7 @@ public static class Items
 			[FromServices] Publisher publisher,
 			Item item) =>
 		{
-			await publisher.ExecuteAsync("PUT", item);
+			await publisher.ExecuteAsync(WebRequestMethods.Http.Put, item);
 			if (await catalogService.GetItemAsync(item.Id) is not { } existingItem || existingItem.CategoryId != item.CategoryId)
 				return Results.NotFound();
 

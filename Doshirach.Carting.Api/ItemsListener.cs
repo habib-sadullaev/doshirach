@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 using Azure.Messaging.ServiceBus;
 using Doshirach.Carting.Core.Models;
 using Doshirach.Carting.Domain.Services;
@@ -7,7 +8,6 @@ namespace Doshirach.Carting.Api;
 
 public class ItemsListener : BackgroundService
 {
-	readonly string connectionString;
 	readonly CartService cartService;
 	readonly ServiceBusClient client;
 	readonly ServiceBusProcessor processor;
@@ -15,7 +15,6 @@ public class ItemsListener : BackgroundService
 	public ItemsListener(CartService cartService, string connectionString)
 	{
 		this.cartService = cartService;
-		this.connectionString = connectionString;
 		client = new ServiceBusClient(connectionString);
 		processor = client.CreateProcessor("Dosh");
 		processor.ProcessMessageAsync += MessageHandler;
@@ -39,7 +38,7 @@ public class ItemsListener : BackgroundService
 		message = (dynamic)(await JsonSerializer.DeserializeAsync(args.Message.Body.ToStream(), message.GetType()))!;
 		switch (message.Method)
 		{
-			case "PUT":
+			case WebRequestMethods.Http.Put:
 				cartService.UpdateItem(message.Item);
 				break;
 			case var method:
