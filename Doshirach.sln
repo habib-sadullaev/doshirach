@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Catalog.Api", "Do
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Carting.Api", "Doshirach.Carting.Api\Doshirach.Carting.Api.csproj", "{97F459C6-89BB-4D07-9F0B-B1BB1CBAE2C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Doshirach.Carting.Grpc.Server", "Doshirach.Carting.Grpc.Server\Doshirach.Carting.Grpc.Server.csproj", "{0F5DE9DE-6AF0-428B-9C77-6BF7002FE795}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Doshirach.Carting.Grpc", "Doshirach.Carting.Grpc\Doshirach.Carting.Grpc.csproj", "{0F5DE9DE-6AF0-428B-9C77-6BF7002FE795}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
