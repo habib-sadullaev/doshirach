@@ -11,10 +11,12 @@ namespace Doshirach.Carting.Api.Controllers;
 public class CartController : ControllerBase
 {
 	private readonly CartService cartService;
+	private readonly ILogger<CartController> logger;
 
-	public CartController(CartService cartService)
+	public CartController(CartService cartService, ILogger<CartController> logger)
 	{
 		this.cartService = cartService;
+		this.logger = logger;
 	}
 
 	[HttpGet("{cartKey}")]
@@ -63,7 +65,11 @@ public class CartController : ControllerBase
 		if (!int.TryParse(itemKey, out var itemId))
 			return BadRequest();
 
+		logger.LogInformation("Adding item {itemId} for cart {cartId}...", itemId, cartId);
+
 		var cartItem = cartService.AddCartItem(cartId, item with { Id = itemId }, quantity);
+
+		logger.LogInformation("Item {itemId} for cart {cartId} is added", itemId, cartId);
 
 		return Ok(cartItem);
 	}

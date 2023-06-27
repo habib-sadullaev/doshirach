@@ -12,6 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var configuration = builder.Configuration;
 
+services.AddApplicationInsightsTelemetry();
 services.AddControllers();
 services.AddEndpointsApiExplorer();
 services.AddApiVersioning(options =>
@@ -44,7 +45,7 @@ services.AddSingleton<ICartItemRepository, CartItemRepository>();
 services.AddSingleton<CartService>();
 services.AddHostedService(p => new ItemsListener(
 	p.GetRequiredService<CartService>(), 
-	configuration.GetConnectionString("LiteDb")!));
+	configuration.GetConnectionString("ServiceBus")!));
 
 var app = builder.Build();
 
